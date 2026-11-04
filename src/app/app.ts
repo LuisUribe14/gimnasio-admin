@@ -1,4 +1,5 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
+import { CLASES_LOCALES } from './datos/clases-locales';
 
 @Component({
   selector: 'app-root',
@@ -7,5 +8,16 @@ import { Component, signal } from '@angular/core';
   styleUrl: './app.css'
 })
 export class App {
-  protected readonly title = signal('gimnasio-admin');
+  clases = CLASES_LOCALES;
+
+  totalClases = this.clases.length;
+
+  minutosSemana = this.clases.reduce(
+    (total, clase) => total + clase.duracionMin,
+    0
+  );
+
+  clasesLargas = this.clases.filter(
+    (clase) => clase.duracionMin >= 60
+  ).length;
 }
