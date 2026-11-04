@@ -7,28 +7,59 @@
   </div>
 </header>
 
-<main class="contenedor">
-  <section class="pagina__encabezado">
-    <h1>Panel del gimnasio</h1>
-    <p class="pagina__bajada">
-      Resumen del catálogo de clases.
-    </p>
+<main class="pagina">
+  <section class="encabezado">
+    <div>
+      <h1>Panel del gimnasio</h1>
+      <p>Resumen del catálogo de clases.</p>
+    </div>
   </section>
 
   <section class="resumen">
-    <article class="resumen__tarjeta">
-      <strong>{{ totalClases }}</strong>
-      <span>Clases</span>
+    <article class="resumen__dato">
+      <strong class="resumen__numero">
+        {{ totalClases }}
+      </strong>
+      <span class="resumen__texto">
+        Clases
+      </span>
     </article>
 
-    <article class="resumen__tarjeta">
-      <strong>{{ minutosSemana }}</strong>
-      <span>Minutos a la semana</span>
+    <article class="resumen__dato">
+      <strong class="resumen__numero">
+        {{ minutosSemana }}
+      </strong>
+      <span class="resumen__texto">
+        Minutos a la semana
+      </span>
     </article>
 
-    <article class="resumen__tarjeta">
-      <strong>{{ clasesLargas }}</strong>
-      <span>Clases de una hora o más</span>
+    <article class="resumen__dato">
+      <strong class="resumen__numero">
+        {{ clasesLargas }}
+      </strong>
+      <span class="resumen__texto">
+        Clases de una hora o más
+      </span>
     </article>
+  </section>
+
+  <div class="acciones">
+    <button class="boton" (click)="vaciarCatalogo()">
+      Vaciar catálogo
+    </button>
+
+    <button class="boton boton--secundario" (click)="restaurarCatalogo()">
+      Restaurar catálogo
+    </button>
+  </div>
+
+  <section class="rejilla">
+    @for (clase of clases; track clase.id) { <app-tarjeta-clase [clase]="clase" />
+    } @empty {
+    <p class="vacio">
+      No hay clases disponibles.
+    </p>
+    }
   </section>
 </main>

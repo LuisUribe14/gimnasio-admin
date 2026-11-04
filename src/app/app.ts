@@ -1,9 +1,16 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy
+} from '@angular/core';
+
 import { CLASES_LOCALES } from './datos/clases-locales';
+import { TarjetaClase } from './componentes/tarjeta-clase/tarjeta-clase';
 
 @Component({
   selector: 'app-root',
-  imports: [],
+  imports: [
+    TarjetaClase
+  ],
   templateUrl: './app.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './app.css'
@@ -11,14 +18,28 @@ import { CLASES_LOCALES } from './datos/clases-locales';
 export class App {
   clases = CLASES_LOCALES;
 
-  totalClases = this.clases.length;
+  get totalClases() {
+    return this.clases.length;
+  }
 
-  minutosSemana = this.clases.reduce(
-    (total, clase) => total + clase.duracionMin,
-    0
-  );
+  get minutosSemana() {
+    return this.clases.reduce(
+      (total, clase) => total + clase.duracionMin,
+      0
+    );
+  }
 
-  clasesLargas = this.clases.filter(
-    (clase) => clase.duracionMin >= 60
-  ).length;
+  get clasesLargas() {
+    return this.clases.filter(
+      (clase) => clase.duracionMin >= 60
+    ).length;
+  }
+
+  vaciarCatalogo() {
+    this.clases = [];
+  }
+
+  restaurarCatalogo() {
+    this.clases = CLASES_LOCALES;
+  }
 }
