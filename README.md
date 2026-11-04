@@ -1,59 +1,10 @@
-# GimnasioAdmin
+## Respuestas
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.4.
+### ¿Qué archivo de Angular hace el papel de main.tsx, App.tsx y vite.config.ts?
+main.ts cumple una función similar a main.tsx porque es el punto de entrada de la aplicacion. app.ts y app.html cumplen un papel parecido a App.tsx ya que contienen el componente principal y su interfaz
 
-## Development server
+### ¿Por qué clase() lleva paréntesis?
+Porque clase fue creada con input.required() que devuelve una señal de Angular entonces para obtener su valor se llama como una funcion por eso se escribe clase()
 
-To start a local development server, run:
-
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+### ¿Para qué sirve track en @for?
+track permite que Angular identifique cada elemento de la lista de manera unica y en este caso se utiliza clase.id lo que ayuda a Angular a actualizar solamente los elementos que cambiaron y evita volver a crear toda la lista innecesariamente
