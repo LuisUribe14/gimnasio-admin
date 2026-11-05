@@ -1,45 +1,42 @@
 import {
+  ChangeDetectionStrategy,
   Component,
-  ChangeDetectionStrategy
+  computed,
+  inject
 } from '@angular/core';
 
-import { CLASES_LOCALES } from './datos/clases-locales';
+import { FiltroCategoria } from './componentes/filtro-categoria/filtro-categoria';
 import { TarjetaClase } from './componentes/tarjeta-clase/tarjeta-clase';
+import { Catalogo } from './servicios/catalogo';
 
 @Component({
   selector: 'app-root',
   imports: [
-    TarjetaClase
+    TarjetaClase,
+    FiltroCategoria
   ],
   templateUrl: './app.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './app.css'
 })
 export class App {
-  clases = CLASES_LOCALES;
+  catalogo = inject(Catalogo);
 
-  get totalClases() {
-    return this.clases.length;
-  }
+  totalClases = computed(() =>
+    this.catalogo.clasesVisibles().length
+  );
 
-  get minutosSemana() {
-    return this.clases.reduce(
-      (total, clase) => total + clase.duracionMin,
-      0
-    );
-  }
-
-  get clasesLargas() {
-    return this.clases.filter(
+  clasesLargas = computed(() =>
+    this.catalogo.clasesVisibles().filter(
       (clase) => clase.duracionMin >= 60
-    ).length;
-  }
+    ).length
+  );
 
   vaciarCatalogo() {
-    this.clases = [];
+    this.catalogo.vaciarCatalogo();
   }
 
   restaurarCatalogo() {
-    this.clases = CLASES_LOCALES;
+    this.catalogo.restaurarCatalogo();
   }
 }

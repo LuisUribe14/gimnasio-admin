@@ -1,0 +1,33 @@
+<div class="filtros">
+  <button
+    class="boton"
+    [class.boton--activo]="catalogo.categoria() === 'todas'"
+    (click)="cambiar('todas')"
+  >
+    Todas
+  </button>
+
+  <button
+    class="boton"
+    [class.boton--activo]="catalogo.categoria() === 'fuerza'"
+    (click)="cambiar('fuerza')"
+  >
+    Fuerza
+  </button>
+
+  <button
+    class="boton"
+    [class.boton--activo]="catalogo.categoria() === 'cardio'"
+    (click)="cambiar('cardio')"
+  >
+    Cardio
+  </button>
+
+  <button
+    class="boton"
+    [class.boton--activo]="catalogo.categoria() === 'flexibilidad'"
+    (click)="cambiar('flexibilidad')"
+  >
+    Flexibilidad
+  </button>
+</div>

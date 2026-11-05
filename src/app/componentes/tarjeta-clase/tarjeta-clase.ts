@@ -1,7 +1,8 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  input
+  input,
+  output
 } from '@angular/core';
 
 import type { Clase } from '../../modelos/clase';
@@ -15,4 +16,14 @@ import type { Clase } from '../../modelos/clase';
 })
 export class TarjetaClase {
   clase = input.required<Clase>();
+
+  activa = input(false);
+
+  seleccionar = output<Clase>();
+
+  avisarSeleccion() {
+    this.seleccionar.emit(
+      this.clase()
+    );
+  }
 }

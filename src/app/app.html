@@ -18,8 +18,9 @@
   <section class="resumen">
     <article class="resumen__dato">
       <strong class="resumen__numero">
-        {{ totalClases }}
+        {{ totalClases() }}
       </strong>
+
       <span class="resumen__texto">
         Clases
       </span>
@@ -27,8 +28,9 @@
 
     <article class="resumen__dato">
       <strong class="resumen__numero">
-        {{ minutosSemana }}
+        {{ catalogo.minutosTotales() }}
       </strong>
+
       <span class="resumen__texto">
         Minutos a la semana
       </span>
@@ -36,13 +38,16 @@
 
     <article class="resumen__dato">
       <strong class="resumen__numero">
-        {{ clasesLargas }}
+        {{ clasesLargas() }}
       </strong>
+
       <span class="resumen__texto">
         Clases de una hora o más
       </span>
     </article>
   </section>
+
+  <app-filtro-categoria />
 
   <div class="acciones">
     <button class="boton" (click)="vaciarCatalogo()">
@@ -54,12 +59,44 @@
     </button>
   </div>
 
-  <section class="rejilla">
-    @for (clase of clases; track clase.id) { <app-tarjeta-clase [clase]="clase" />
-    } @empty {
-    <p class="vacio">
-      No hay clases disponibles.
-    </p>
+  <div class="tablero">
+    <section class="rejilla">
+      @for (
+      clase of catalogo.clasesVisibles();
+      track clase.id
+      ) {
+      <app-tarjeta-clase [clase]="clase" [activa]="catalogo.seleccionada()?.id === clase.id"
+        (seleccionar)="catalogo.seleccionarClase($event)" />
+      } @empty {
+      <p class="vacio">
+        No hay clases disponibles.
+      </p>
+      }
+    </section>
+
+    @if (catalogo.seleccionada(); as clase) {
+    <aside class="detalle-panel">
+      <h2>{{ clase.nombre }}</h2>
+
+      <span class="etiqueta" [class]="'etiqueta etiqueta--' + clase.categoria">
+        {{ clase.categoria }}
+      </span>
+
+      <p>
+        {{ clase.descripcion }}
+      </p>
+
+      <div class="detalle-panel__dato">
+        <strong>Duración</strong>
+        <span>{{ clase.duracionMin }} minutos</span>
+      </div>
+
+      @if (clase.duracionMin >= 60) {
+      <span class="etiqueta etiqueta--larga">
+        Larga
+      </span>
+      }
+    </aside>
     }
-  </section>
+  </div>
 </main>
