@@ -1,10 +1,10 @@
 ## Respuestas
 
-### ¿Qué archivo de Angular hace el papel de main.tsx, App.tsx y vite.config.ts?
-main.ts cumple una función similar a main.tsx porque es el punto de entrada de la aplicacion. app.ts y app.html cumplen un papel parecido a App.tsx ya que contienen el componente principal y su interfaz
+### Practica 20
 
-### ¿Por qué clase() lleva paréntesis?
-Porque clase fue creada con input.required() que devuelve una señal de Angular entonces para obtener su valor se llama como una funcion por eso se escribe clase()
+### ¿Qué diferencia hay entre un signal y un computed, y cuál se parece a useState y cuál a useMemo?
+Un signal almacena un valor que puede cambiar durante la ejecucion de la aplicacion y el computed calcula un valor a partir de uno o mas signals y se actualiza automaticamente cuando esos valores cambian
 
-### ¿Para qué sirve track en @for?
-track permite que Angular identifique cada elemento de la lista de manera unica y en este caso se utiliza clase.id lo que ayuda a Angular a actualizar solamente los elementos que cambiaron y evita volver a crear toda la lista innecesariamente
+### ¿Qué pasa si el filtro hace new Catalogo() en lugar de inject(Catalogo)?
+Si se utiliza new Catalogo() se crea una instancia diferente del servicio entonces el filtro tendria su propio estado y no compartiria los mismos signals que usa el resto de la aplicacion y con el con inject(Catalogo) Angular entrega la misma instancia del servicio proporcionada en la aplicacion permitiendo que los componentes compartan el mismo estado
+
