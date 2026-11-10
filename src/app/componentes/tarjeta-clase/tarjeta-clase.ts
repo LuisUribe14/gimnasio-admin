@@ -6,6 +6,7 @@ import {
 } from '@angular/core';
 
 import type { Clase } from '../../modelos/clase';
+import { API_URL } from '../../config';
 
 @Component({
   selector: 'app-tarjeta-clase',
@@ -16,6 +17,8 @@ import type { Clase } from '../../modelos/clase';
 })
 export class TarjetaClase {
   clase = input.required<Clase>();
+
+  apiUrl = API_URL;
 
   activa = input(false);
 

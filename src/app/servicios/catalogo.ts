@@ -4,24 +4,54 @@ import {
   signal
 } from '@angular/core';
 
+import {
+  httpResource
+} from '@angular/common/http';
+
 import type {
   Categoria,
   Clase
 } from '../modelos/clase';
 
-import {
-  CLASES_LOCALES
-} from '../datos/clases-locales';
+import { API_URL } from '../config';
+
+interface RespuestaClases {
+  data: Clase[];
+  meta: {
+    ruta: string;
+    duracionMs: number;
+    timestamp: string;
+  };
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class Catalogo {
-  clases = signal<Clase[]>(CLASES_LOCALES);
 
-  categoria = signal<Categoria | 'todas'>('todas');
+  private recursoClases =
+    httpResource<RespuestaClases>(
+      () => `${API_URL}/clases`
+    );
 
-  seleccionada = signal<Clase | null>(null);
+  categoria =
+    signal<Categoria | 'todas'>('todas');
+
+  seleccionada =
+    signal<Clase | null>(null);
+
+  clases = computed(
+    () =>
+      this.recursoClases.value()?.data ?? []
+  );
+
+  cargando = computed(
+    () => this.recursoClases.isLoading()
+  );
+
+  error = computed(
+    () => this.recursoClases.error()
+  );
 
   clasesVisibles = computed(() => {
     const categoriaActual =
@@ -78,11 +108,24 @@ export class Catalogo {
   }
 
   vaciarCatalogo() {
-    this.clases.set([]);
+    const respuesta =
+      this.recursoClases.value();
+
+    if (respuesta) {
+      this.recursoClases.set({
+        ...respuesta,
+        data: []
+      });
+    }
+
     this.seleccionada.set(null);
   }
 
   restaurarCatalogo() {
-    this.clases.set(CLASES_LOCALES);
+    this.recursoClases.reload();
+  }
+
+  recargar() {
+    this.recursoClases.reload();
   }
 }

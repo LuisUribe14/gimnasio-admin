@@ -1,0 +1,135 @@
+<main class="pagina">
+  <section class="encabezado">
+    <div>
+      <h1>Nueva clase</h1>
+      <p>Captura los datos de la clase.</p>
+    </div>
+  </section>
+
+  <form
+    class="formulario"
+    [formGroup]="formulario"
+    (ngSubmit)="guardar()"
+  >
+    <label>
+      Nombre
+      <input
+        type="text"
+        formControlName="nombre"
+      />
+    </label>
+
+    @if (
+      formulario.controls.nombre.touched &&
+      formulario.controls.nombre.hasError('required')
+    ) {
+      <p class="error">
+        El nombre es obligatorio.
+      </p>
+    }
+
+    @if (
+      formulario.controls.nombre.touched &&
+      formulario.controls.nombre.hasError('minlength')
+    ) {
+      <p class="error">
+        El nombre debe tener al menos 3 caracteres.
+      </p>
+    }
+
+    <label>
+      Categoría
+      <select formControlName="categoria">
+        <option value="">
+          Selecciona una categoría
+        </option>
+        <option value="fuerza">Fuerza</option>
+        <option value="cardio">Cardio</option>
+        <option value="flexibilidad">Flexibilidad</option>
+      </select>
+    </label>
+
+    @if (
+      formulario.controls.categoria.touched &&
+      formulario.controls.categoria.hasError('required')
+    ) {
+      <p class="error">
+        La categoría es obligatoria.
+      </p>
+    }
+
+    <label>
+      Descripción
+      <textarea
+        formControlName="descripcion"
+      ></textarea>
+    </label>
+
+    @if (
+      formulario.controls.descripcion.touched &&
+      formulario.controls.descripcion.hasError('required')
+    ) {
+      <p class="error">
+        La descripción es obligatoria.
+      </p>
+    }
+
+    <label>
+      Duración en minutos
+      <input
+        type="number"
+        formControlName="duracionMin"
+      />
+    </label>
+
+    @if (
+      formulario.controls.duracionMin.touched &&
+      formulario.controls.duracionMin.hasError('required')
+    ) {
+      <p class="error">
+        La duración es obligatoria.
+      </p>
+    }
+
+    @if (
+      formulario.controls.duracionMin.touched &&
+      formulario.controls.duracionMin.hasError('bloqueCinco')
+    ) {
+      <p class="error">
+        La duración debe estar en bloques de 5 minutos.
+      </p>
+    }
+
+    <label>
+      Imagen
+      <input
+        type="text"
+        formControlName="imagen"
+      />
+    </label>
+
+    @if (
+      formulario.controls.imagen.touched &&
+      formulario.controls.imagen.hasError('required')
+    ) {
+      <p class="error">
+        La imagen es obligatoria.
+      </p>
+    }
+
+    <button
+      class="boton"
+      type="submit"
+    >
+      Guardar
+    </button>
+  </form>
+
+  @if (objetoListo) {
+    <section class="aviso">
+      <h2>Objeto listo para mandar</h2>
+
+      <pre>{{ objetoListo | json }}</pre>
+    </section>
+  }
+</main>

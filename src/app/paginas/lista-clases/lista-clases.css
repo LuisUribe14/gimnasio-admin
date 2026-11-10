@@ -1,0 +1,31 @@
+.tablero {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.detalle-panel {
+  background: white;
+  border: 1px solid #dfe4e8;
+  border-radius: 12px;
+  padding: 1.25rem;
+  position: sticky;
+  top: 1rem;
+}
+
+.detalle-panel h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.detalle-panel p {
+  line-height: 1.6;
+}
+
+.detalle-panel__dato {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 1rem 0;
+}
