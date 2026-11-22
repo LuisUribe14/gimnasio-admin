@@ -1,22 +1,28 @@
 ## Respuestas
 
-### Practica 21
+### Practica 22
 
-### 1. ¿Qué pieza de React Router corresponde a router-outlet, routerLink y routerLinkActive?
-Router-outlet corresponde a una funcion parecida a <Outlet /> del React Router pq es el lugar donde se muestra el componente de la ruta actual y el routerLink corresponde a <Link /> o <NavLink /> ya que permite navegar entre rutas sin recargar toda la pagina y el routerLinkActive se parece a la funcionalidad de NavLink pq permite aplicar una clase cuando el enlace corresponde a la ruta activa
+### 1. Si el formulario ya valida, ¿por qué también valida el servidor?
+Pq las validaciones del frontend se pueden modificar o evitar y el servidor debe validar nuevamente los datos antes de guardarlos para proteger la informacion y evitar que lleguen datos invalidos a la base de datos
 
-### 2. ¿Por qué la ruta comodín (**) va al final y la ruta vacía necesita pathMatch: 'full'?
-La ruta comodin ** se coloca al final porque coincide con cualquier ruta que no haya sido encontrada antes entonces si se colocara primero atraparia las demas rutas y
-la ruta vacia necesita pathMatch: 'full' para que la redireccion ocurra solamente cuando la URL este completamente vacia sin esto podria coincidir tambien con otras rutas que comienzan desde la raiz
+### 2. ¿Por qué usamos httpResource para leer y HttpClient para crear, editar y eliminar?
+httpResource es util para consultar datos y mantenerlos de forma reactiv, por eso se utiliza para cargar el catalogo y el HttpClient se utiliza para operaciones como POST, PATCH y DELETE ya que son acciones que modifican datos y necesitamos controlar cuando se ejecutan y que hacer cuando terminan
 
-### 3. ¿Dónde vive el valor de un campo en un formulario reactivo y en qué se diferencia del useState de React?
-En un formulario reactivo de Angular el valor de cada campo vive dentro de su FormControl que forma parte del FormGroup a diferencia de useState en React no es necesario crear un estado separado para cada campo pq Angular administra el valor el estado de validacion si el campo fue tocado y otros datos directamente dentro del control del formulario
+### 3. ¿Qué pasa si se olvida el subscribe()?
+La peticion de HttpClient no se ejecuta y los metodos como post(), patch() y delete() regresan un Observable y es necesario suscribirse para realizar la peticion
 
-### 4. ¿Qué regresa un validador propio cuando el valor es válido y cuando no, y cómo se relaciona con hasError?
-Un validador propio regresa null cuando el valor es valido entonces cuando el valor no es valido regresa un objeto con el nombre del error y después se puede usar hasError('bloqueCinco') para comprobar si ese error esta presente y mostrar el mensaje correspondiente
+### 4. ¿A qué pieza de React corresponden las rutas hijas, el interceptor y el guardia?
+Las rutas hijas de Angular son similares a las rutas anidadas de React Router. El interceptor se parece a una configuracion centralizada de las peticiones HTTP y el guardia se parece a una ruta protegida de React que verifica si el usuario tiene permiso antes de mostrar un componente
 
-### 5. ¿Qué cambió en el servicio del catálogo y por qué ningún componente se enteró?
-El servicio dejo de obtener las clases desde un arreglo local y comenzo a obtenerlas desde la API mediante httpResource con GET /clases entonces los componentes casi no tuvieron que cambiar porque siguen leyendo la informacion desde el mismo servicio Catalogo y el servicio mantiene la misma responsabilidad de exponer las clases visibles, los filtros y los datos calculados aunque internamente cambio la fuente de los datos
+### 5. ¿Cuándo se ejecuta el guardia y por qué salir() tiene que navegar al login?
+El guardia se ejecuta antes de permitir el acceso a una ruta protegida. En nuestro caso comprueba que exista una sesion valida y que el usuario sea administrador.
+salir() tiene que navegar al login porque despues de cerrar la sesion el usuario ya no debe permanecer dentro de las rutas protegidas del panel
 
-### 6. ¿Por qué no hizo falta iniciar sesión para leer el catálogo?
-No fue necesario iniciar sesion porque el endpoint GET /clases es publico y permite consultar el catalogo sin enviar un token de autenticacion y por eso Angular puede realizar la peticion directamente y mostrar las clases aunque el usuario no haya iniciado sesion
+### 6. ¿Cómo decide un mismo formulario, con dos rutas, si manda POST o PATCH?
+El formulario revisa si existe un id de clase en la URL y si no existe un id significa que se esta creando una nueva clase y se manda un POST entonces si existe un id significa que se esta editando una clase existente y se manda un PATCH
+
+### 7. ¿Por qué el estado del formulario no se puede observar con un computed()?
+Pq el estado de un formulario reactivo como dirty, touched o los valores de sus controles no es un Signal de Angular. computed() reacciona a Signals mientras que los formularios reactivos utilizan controles y Observables como valueChanges y statusChanges
+
+### 8. ¿Qué diferencia hay entre canActivate y canDeactivate, y qué casos no cubre la guarda de salida?
+canActivate se ejecuta antes de entrar a una ruta y decide si el usuario puede acceder y canDeactivate se ejecuta cuando el usuario intenta salir de una ruta y permite comprobar si existen cambios sin guardar. La guarda de salida protege la navegacion realizada dentro de Angular pero no garantiza evitar todos los casos externos como cerrar completamente el navegador o cerrar la pestaña o algunas recargas de la pagina
