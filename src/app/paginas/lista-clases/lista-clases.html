@@ -38,117 +38,101 @@
     </article>
   </section>
 
-  <a
-    routerLink="/clases/nueva"
-    class="boton"
-  >
+  <a routerLink="/clases/nueva" class="boton">
     + Nueva clase
   </a>
+
+  <div class="buscador">
+    <label for="buscar">
+      Buscar clase
+    </label>
+
+    <input id="buscar" type="text" [formControl]="busqueda" placeholder="Ej. yoga, fuerza, pilates..." />
+  </div>
 
   <app-filtro-categoria />
 
   <div class="acciones">
-    <button
-      class="boton"
-      (click)="vaciarCatalogo()"
-    >
+    <button class="boton" (click)="vaciarCatalogo()">
       Vaciar catálogo
     </button>
 
-    <button
-      class="boton boton--secundario"
-      (click)="restaurarCatalogo()"
-    >
+    <button class="boton boton--secundario" (click)="restaurarCatalogo()">
       Restaurar catálogo
     </button>
   </div>
 
   @if (catalogo.cargando()) {
-    <p class="vacio">
-      Cargando clases...
-    </p>
+  <p class="vacio">
+    Cargando clases...
+  </p>
   } @else if (catalogo.error()) {
-    <div class="vacio">
+  <div class="vacio">
+    <p>
+      No se pudo cargar el catálogo.
+    </p>
+
+    <button class="boton" (click)="catalogo.recargar()">
+      Reintentar
+    </button>
+  </div>
+  } @else {
+  <div class="tablero">
+    <section class="rejilla">
+      @for (
+      clase of catalogo.clasesVisibles();
+      track clase.id
+      ) {
+      <app-tarjeta-clase [clase]="clase" [activa]="catalogo.seleccionada()?.id === clase.id"
+        (seleccionar)="catalogo.seleccionarClase($event)" />
+      } @empty {
+      <p class="vacio">
+        No se encontraron clases.
+      </p>
+      }
+    </section>
+
+    @if (catalogo.seleccionada(); as clase) {
+    <aside class="detalle-panel">
+      <h2>{{ clase.nombre }}</h2>
+
+      <span class="etiqueta" [class]="'etiqueta etiqueta--' + clase.categoria">
+        {{ clase.categoria }}
+      </span>
+
       <p>
-        No se pudo cargar el catálogo.
+        {{ clase.descripcion }}
       </p>
 
-      <button
-        class="boton"
-        (click)="catalogo.recargar()"
-      >
-        Reintentar
-      </button>
-    </div>
-  } @else {
-    <div class="tablero">
-      <section class="rejilla">
-        @for (
-          clase of catalogo.clasesVisibles();
-          track clase.id
-        ) {
-          <app-tarjeta-clase
-            [clase]="clase"
-            [activa]="catalogo.seleccionada()?.id === clase.id"
-            (seleccionar)="catalogo.seleccionarClase($event)"
-          />
-        } @empty {
-          <p class="vacio">
-            No hay clases disponibles.
-          </p>
-        }
-      </section>
+      <div class="detalle-panel__dato">
+        <strong>Duración</strong>
 
-      @if (catalogo.seleccionada(); as clase) {
-        <aside class="detalle-panel">
-          <h2>{{ clase.nombre }}</h2>
+        <span>
+          {{ clase.duracionMin }} minutos
+        </span>
+      </div>
 
-          <span
-            class="etiqueta"
-            [class]="'etiqueta etiqueta--' + clase.categoria"
-          >
-            {{ clase.categoria }}
-          </span>
+      @if (clase.duracionMin >= 60) {
+      <span class="etiqueta etiqueta--larga">
+        Larga
+      </span>
+      }
 
-          <p>
-            {{ clase.descripcion }}
-          </p>
-
-          <div class="detalle-panel__dato">
-            <strong>Duración</strong>
-
-            <span>
-              {{ clase.duracionMin }} minutos
-            </span>
-          </div>
-
-          @if (clase.duracionMin >= 60) {
-            <span class="etiqueta etiqueta--larga">
-              Larga
-            </span>
-          }
-
-          <div class="acciones">
-            <a
-              class="boton"
-              [routerLink]="[
+      <div class="acciones">
+        <a class="boton" [routerLink]="[
                 '/clases',
                 clase.id,
                 'editar'
-              ]"
-            >
-              Editar
-            </a>
+              ]">
+          Editar
+        </a>
 
-            <button
-              class="boton boton--secundario"
-              (click)="eliminarClase(clase.id)"
-            >
-              Eliminar
-            </button>
-          </div>
-        </aside>
-      }
-    </div>
+        <button class="boton boton--secundario" (click)="eliminarClase(clase.id)">
+          Eliminar
+        </button>
+      </div>
+    </aside>
+    }
+  </div>
   }
 </main>

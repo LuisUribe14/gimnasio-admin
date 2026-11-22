@@ -1,27 +1,36 @@
 import {
   Injectable,
   computed,
+  inject,
   signal
 } from '@angular/core';
 
 import {
-  httpResource
-} from '@angular/common/http';
+  toSignal
+} from '@angular/core/rxjs-interop';
+
+import {
+  BehaviorSubject,
+  catchError,
+  map,
+  of,
+  startWith,
+  switchMap
+} from 'rxjs';
 
 import type {
   Categoria,
   Clase
 } from '../modelos/clase';
 
-import { API_URL } from '../config';
+import {
+  ClasesApi
+} from './clases-api';
 
-interface RespuestaClases {
-  data: Clase[];
-  meta: {
-    ruta: string;
-    duracionMs: number;
-    timestamp: string;
-  };
+interface EstadoCatalogo {
+  clases: Clase[];
+  cargando: boolean;
+  error: unknown | null;
 }
 
 @Injectable({
@@ -29,10 +38,45 @@ interface RespuestaClases {
 })
 export class Catalogo {
 
-  private recursoClases =
-    httpResource<RespuestaClases>(
-      () => `${API_URL}/clases`
-    );
+  private clasesApi = inject(ClasesApi);
+
+  private busqueda =
+    new BehaviorSubject<string>('');
+
+  private estado = toSignal(
+    this.busqueda.pipe(
+      switchMap((q) =>
+        this.clasesApi.buscar(q).pipe(
+          map((respuesta) => ({
+            clases: respuesta.data,
+            cargando: false,
+            error: null
+          } as EstadoCatalogo)),
+
+          catchError((error) =>
+            of({
+              clases: [],
+              cargando: false,
+              error
+            } as EstadoCatalogo)
+          ),
+
+          startWith({
+            clases: [],
+            cargando: true,
+            error: null
+          } as EstadoCatalogo)
+        )
+      )
+    ),
+    {
+      initialValue: {
+        clases: [],
+        cargando: true,
+        error: null
+      } as EstadoCatalogo
+    }
+  );
 
   categoria =
     signal<Categoria | 'todas'>('todas');
@@ -41,16 +85,15 @@ export class Catalogo {
     signal<Clase | null>(null);
 
   clases = computed(
-    () =>
-      this.recursoClases.value()?.data ?? []
+    () => this.estado().clases
   );
 
   cargando = computed(
-    () => this.recursoClases.isLoading()
+    () => this.estado().cargando
   );
 
   error = computed(
-    () => this.recursoClases.error()
+    () => this.estado().error
   );
 
   clasesVisibles = computed(() => {
@@ -82,6 +125,14 @@ export class Catalogo {
     ).length
   );
 
+  buscar(q: string) {
+    this.busqueda.next(
+      q.trim()
+    );
+
+    this.seleccionada.set(null);
+  }
+
   cambiarCategoria(
     categoria: Categoria | 'todas'
   ) {
@@ -107,25 +158,17 @@ export class Catalogo {
     this.seleccionada.set(clase);
   }
 
-  vaciarCatalogo() {
-    const respuesta =
-      this.recursoClases.value();
-
-    if (respuesta) {
-      this.recursoClases.set({
-        ...respuesta,
-        data: []
-      });
-    }
-
-    this.seleccionada.set(null);
+  recargar() {
+    this.busqueda.next(
+      this.busqueda.value
+    );
   }
 
   restaurarCatalogo() {
-    this.recursoClases.reload();
+    this.buscar('');
   }
 
-  recargar() {
-    this.recursoClases.reload();
+  vaciarCatalogo() {
+    this.seleccionada.set(null);
   }
 }

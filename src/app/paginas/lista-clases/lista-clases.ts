@@ -10,13 +10,17 @@ import { FiltroCategoria } from '../../componentes/filtro-categoria/filtro-categ
 import { TarjetaClase } from '../../componentes/tarjeta-clase/tarjeta-clase';
 import { Catalogo } from '../../servicios/catalogo';
 import { ClasesApi } from '../../servicios/clases-api';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-lista-clases',
   imports: [
     TarjetaClase,
     FiltroCategoria,
-    RouterLink
+    RouterLink,
+    ReactiveFormsModule
   ],
   templateUrl: './lista-clases.html',
   styleUrl: './lista-clases.css',
@@ -73,6 +77,21 @@ export class ListaClases {
             'No se pudo eliminar la clase.'
           );
         }
+      });
+  }
+  busqueda = new FormControl('', {
+    nonNullable: true
+  });
+
+  constructor() {
+    this.busqueda.valueChanges
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged(),
+        takeUntilDestroyed()
+      )
+      .subscribe((texto) => {
+        this.catalogo.buscar(texto);
       });
   }
 }

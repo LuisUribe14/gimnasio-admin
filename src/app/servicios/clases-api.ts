@@ -50,4 +50,18 @@ export class ClasesApi {
             `${API_URL}/clases/${id}`
         );
     }
+
+    buscar(q: string) {
+        return this.http.get<{
+            data: Clase[];
+            meta: unknown;
+        }>(
+            `${API_URL}/clases`,
+            {
+                params: {
+                    q
+                }
+            }
+        );
+    }
 }
