@@ -43,6 +43,21 @@ export interface ClaseConHorarios extends Clase {
 // Es Clase SIN el id: el id lo pone la base de datos.
 export type ClaseNueva = Omit<Clase, 'id'>;
 
+export interface Sobre<T> {
+  data: T;
+  meta: {
+    ruta: string;
+    duracionMs: number;
+    timestamp: string;
+  };
+}
+
+export interface Usuario {
+  correo: string;
+  nombre: string;
+  rol: 'miembro' | 'entrenador' | 'admin';
+}
+
 // Toda respuesta exitosa de la API viene en este sobre (Práctica 9B).
 export interface Sobre<T> {
   data: T;

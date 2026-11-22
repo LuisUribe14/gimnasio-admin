@@ -116,6 +116,7 @@
 
           <div class="detalle-panel__dato">
             <strong>Duración</strong>
+
             <span>
               {{ clase.duracionMin }} minutos
             </span>
@@ -126,6 +127,26 @@
               Larga
             </span>
           }
+
+          <div class="acciones">
+            <a
+              class="boton"
+              [routerLink]="[
+                '/clases',
+                clase.id,
+                'editar'
+              ]"
+            >
+              Editar
+            </a>
+
+            <button
+              class="boton boton--secundario"
+              (click)="eliminarClase(clase.id)"
+            >
+              Eliminar
+            </button>
+          </div>
         </aside>
       }
     </div>

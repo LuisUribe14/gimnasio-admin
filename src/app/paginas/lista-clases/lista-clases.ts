@@ -9,6 +9,7 @@ import { RouterLink } from '@angular/router';
 import { FiltroCategoria } from '../../componentes/filtro-categoria/filtro-categoria';
 import { TarjetaClase } from '../../componentes/tarjeta-clase/tarjeta-clase';
 import { Catalogo } from '../../servicios/catalogo';
+import { ClasesApi } from '../../servicios/clases-api';
 
 @Component({
   selector: 'app-lista-clases',
@@ -21,6 +22,7 @@ import { Catalogo } from '../../servicios/catalogo';
   styleUrl: './lista-clases.css',
   changeDetection: ChangeDetectionStrategy.Eager
 })
+
 export class ListaClases {
   catalogo = inject(Catalogo);
 
@@ -40,5 +42,37 @@ export class ListaClases {
 
   restaurarCatalogo() {
     this.catalogo.restaurarCatalogo();
+  }
+
+  private clasesApi = inject(ClasesApi);
+
+  eliminarClase(id: number) {
+    const confirmar = confirm(
+      '¿Seguro que quieres eliminar esta clase?'
+    );
+
+    if (!confirmar) {
+      return;
+    }
+
+    this.clasesApi
+      .eliminar(id)
+      .subscribe({
+        next: () => {
+          this.catalogo.seleccionada.set(null);
+          this.catalogo.recargar();
+        },
+
+        error: (error) => {
+          console.error(
+            'Error al eliminar la clase:',
+            error
+          );
+
+          alert(
+            'No se pudo eliminar la clase.'
+          );
+        }
+      });
   }
 }

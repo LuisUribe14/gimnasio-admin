@@ -4,21 +4,16 @@ import {
 } from '@angular/core';
 
 import {
-  RouterLink,
-  RouterLinkActive,
   RouterOutlet
 } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   imports: [
-    RouterLink,
-    RouterLinkActive,
     RouterOutlet
   ],
   templateUrl: './app.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './app.css'
 })
-export class App {
-}
+export class App {}
